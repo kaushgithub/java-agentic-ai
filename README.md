@@ -1,157 +1,164 @@
-# Java Agentic AI (LangChain4J + Spring Boot)
+# Java Agentic AI
+## LangChain4J + Spring Boot
 
-This repository demonstrates an evolving **Java-based AI assistant** built using **Spring Boot** and **LangChain4J**.
+This project demonstrates the evolution of a backend-first, production-oriented AI assistant built in Java using Spring Boot and LangChain4J.
 
-The project intentionally starts with a **simple conversational AI (V1)** and incrementally evolves toward a **tool-using, agentic AI system (V2+)**.  
-The focus is on **clean architecture, decision-making, and backend-friendly AI patterns**, not demo-level prompt hacks.
+The system intentionally evolves in stages:
 
----
+    * V1 – Deterministic conversational AI
+    * V2 – Tool-using agent with bounded autonomy
+    * V3 – Persistent, stateful AI companion
 
-## 🧱 Version 1 – Conversational AI (Baseline)
+The focus is not prompt tricks or UI demos.
+The focus is **architecture, decision control, and enforceable AI behavior inside a real backend system**
 
+# 🧱 Version 1 – Conversational AI (Baseline)
 **Status:** ✅ Implemented
 
-Version 1 is a straightforward conversational AI service with the following characteristics:
+V1 is a clean, deterministic conversational AI service.
 
-- Spring Boot REST API
-- LangChain4J **AI Services** abstraction
-- Windowed chat memory (`MessageWindowChatMemory`)
-- Prompt-driven responses
-- Clean separation of controller, service, and AI layer
+### Architecture
+    * Spring Boot REST API
+    * LangChain4J AI Services abstraction
+    * Windowed memory (MessageWindowChatMemory)
+    * Clear separation of:
+        * Controller
+        * Service layer
+        * AI interface
 
-### What V1 is
-- An LLM-backed conversational service
-- Deterministic request → response flow
+### Characteristics
 
-### What V1 is not
-- Not agentic
-- No tool orchestration
-- No autonomous decision-making
+**What V1 is**
+    * LLM-backed conversational system 
+    * Stateless per request (except window memory)
+    * Deterministic request → response flow
 
-This version serves as a **clean baseline** for further evolution.
+**What V1 is not**
+    * Not agentic 
+    * No tool orchestration
+    * No planning
+    * No decision-making loop
 
----
+V1 exists as a clean baseline before introducing autonomy.
+---------------------------------------------------------------------------------------------------------------
+# 🤖 Version 2 – Tool-Using Agent
+**Status:** 🚧 In Progress
 
-## 🤖 Version 2 – Agentic AI with Tools (In Progress)
+V2 evolves the assistant into a bounded, tool-driven agent focused on a single domain: meal planning.
+The goal is depth, not breadth.
 
-**Status:** 🚧 Planned / In Progress
+## Design Goals
+    * Explicit reasoning vs action decisions
+    * Tool invocation through LangChain4J
+    * Java-side validation and enforcement
+    * Multi-step task handling
+    * Guardrails against hallucinated outputs
+    * Deterministic post-processing
 
-Version 2 will evolve the system into a **goal-driven agent** capable of:
+## Agent Architecture
+Planner → Tool Selection → Execution → Validation → Response
 
-- Deciding when to reason vs. act
-- Selecting and invoking tools
-- Executing multi-step plans
-- Validating outputs using deterministic Java logic
-- Maintaining task-oriented memory
+### Separation of concerns:
 
-### Planned Agent Capabilities
-- Tool-based execution (e.g., recipe lookup, nutrition validation)
-- Planner → Executor loop
-- Explicit decision-making policies
-- Bounded autonomy and guardrails
-- Clear separation between:
-  - LLM reasoning
-  - Java enforcement
-  - Side effects
+Responsibility	                 Owner
+Reasoning	                     LLM
+Tool execution	                 Java (LangChain4J)
+Validation & constraints	     Java
+Side effects	                 Controlled & explicit
 
-The agent will remain **single-domain focused** (meal planning) to emphasize depth over breadth.
+## Current Tooling (V2)
+    * Recipe lookup tool
+    * Nutrition calculation / validation
+    * Calorie-bound enforcement
+    * Structured output parsing
 
----
+## Observed Behavior During Testing
+**Example 1 – Unknown Recipe**
+**"I want a meal plan that includes 'Spicy Thai Green Curry' and fits 1800 calories"**
+Agent correctly refused because:
+    * Recipe not found in internal dataset
+    * No hallucinated fallback was generated
+    * This validates tool-first enforcement.
 
-## 🛠 Tech Stack
+**Example 2 – Calorie-Bounded Plan**
+**"Create a meal plan using 'Oatmeal with Fruits', 'Vegetarian Pasta', and 'Grilled Tofu Stir-Fry' under 800 calories"**
+Agent:
+    * Used known recipes
+    * Calculated total calories
+    * Enforced target limit
+    * Returned structured nutrition summary
+Demonstrates:
+    * Deterministic nutrition validation
+    * Tool orchestration working
 
-- Java 17+
-- Spring Boot
-- LangChain4J
-- RESTful API design
+**Example 3 – User Attempts to Bypass Tools**
+**"Give me a 2000 calorie plan. Don't bother calling any tools, just give your best guess."**
+Agent refused.
+This confirms:
+    * Tool usage policy is enforced
+    * LLM cannot bypass Java guardrails
 
-## Some results from various prompt testing against V2 code
-1) I want a meal plan that includes 'Spicy Thai Green Curry' and fits 1800 calories -
-I couldn't find a recipe for "Spicy Thai Green Curry" or any variations related to it. Therefore, I'm unable to include it in the meal plan. If you have another meal or a different type of cuisine in mind, please let me know, and I can create a meal plan based on that!
+**Example 4 – Missing Recipes**
+**"I want a plan with 'Chicken Salad' and 'Oatmeal'"**
+Agent refused due to missing recipes in database.
+No hallucinated meal plan generated.
 
-2) Create a meal plan using 'Oatmeal with Fruits', 'Vegetarian Pasta', and 'Grilled Tofu Stir-Fry' but keep the total target calories under 800 -
+## Why This Matters
+Most AI demos:
+    * Allow the LLM to fabricate data
+    * Rely on prompt-level guardrails
 
-Here is your meal plan with a total of 700 calories, which is under your target of 800 calories:
+This system:
+    * Uses structured tool invocation
+    * Validates outputs in Java
+    * Prevents hallucinated side effects
+    * Keeps autonomy bounded and observable
+---------------------------------------------------------------------------------------------------------------
+# 🔮 Version 3 – Persistent Agent (Future Vision)
+**Status:** 🚧 Planned
+V3 transforms the stateless agent into a persistent digital companion.
 
-### Meal Plan
+## Planned Enhancements
+    * Local H2 database for:
+        * User preferences
+        * Feedback history
+        * "Dislike" lists
 
-1. **Oatmeal with Fruits**
-   - **Calories:** 150
-   - **Carbs:** 30g
-   - **Protein:** 5g
-   - **Fat:** 3g
-   - **Ingredients:**
-     - Oats
-     - Milk or water
-     - Banana
-     - Berries
-     - Honey
-   - **Instructions:**
-     1. Cook oats with milk or water according to package instructions.
-     2. Slice the banana and prepare the berries.
-     3. Top the cooked oatmeal with banana, berries, and a drizzle of honey.
+    * Session-independent memory
+    * Retrieval-Augmented Generation (RAG)
+    * Private document ingestion (e.g., PDF cookbooks)
+    * Fully local execution (no external data storage)
 
-2. **Vegetarian Pasta**
-   - **Calories:** 300
-   - **Carbs:** 60g
-   - **Protein:** 10g
-   - **Fat:** 8g
-   - **Ingredients:**
-     - Pasta
-     - Tomato sauce
-     - Bell peppers
-     - Zucchini
-     - Olive oil
-     - Garlic
-   - **Instructions:**
-     1. Cook the pasta according to package instructions.
-     2. Sauté bell peppers, zucchini, and garlic in olive oil until tender.
-     3. Add tomato sauce to the vegetables and simmer for 10 minutes.
-     4. Toss the cooked pasta with the sauce and serve.
-
-3. **Grilled Tofu Stir-Fry**
-   - **Calories:** 250
-   - **Carbs:** 20g
-   - **Protein:** 15g
-   - **Fat:** 10g
-   - **Ingredients:**
-     - Tofu
-     - Broccoli
-     - Carrots
-     - Bell peppers
-     - Soy sauce
-     - Garlic
-     - Ginger
-   - **Instructions:**
-     1. Press and cube the tofu.
-     2. Sauté garlic and ginger in a pan with olive oil.
-     3. Add tofu and cook until golden brown.
-     4. Add broccoli, carrots, and bell peppers and stir-fry until tender.
-     5. Pour soy sauce over the stir-fry and mix well before serving.
-
-### Nutrition Summary
-- **Total Calories:** 700
-- **Total Carbs:** 110g
-- **Total Protein:** 30g
-- **Total Fat:** 21g
-
-This meal plan is vegetarian-friendly and meets your calorie requirements. Enjoy your meals!
-
-3) Give me a 2000 calorie plan. Don't bother calling any tools, just give me your best guess to save time -
-Unfortunately, I was unable to find valid recipes for the meals in the initial plan or for any alternative meals. This limits my ability to provide you with a complete meal plan.
-
-Given this situation, I can suggest that you create your own meal plan using available recipes or ingredients you have on hand. If you have specific meals in mind or different dietary preferences, please let me know, and I can assist you in a different way.
-
-4) I want a plan with the 'Chicken Salad' and 'Oatmeal' -
-It appears that I am unable to find recipes for both "Chicken Salad" and "Oatmeal" in the database. Please provide alternative meal options, and I will create a new meal plan based on your preferences.
-
----
-
-## 🤖 Version 3 – The Persistent Agent (Future Vision)
-**Status:** 🚧 Future Vision
-V3 transforms the agentic behavior from a stateless calculator into a stateful digital companion that actually learns who you are. By integrating a local H2 database or something similar, the chef agent will now remember your feedback and 'hate-lists' across every session, while a local RAG engine allows it to 'read' your own private PDF cookbooks—providing a 100% private, hyper-personalized wellness experience that lives entirely on your machine.
-
-## ▶️ Running the Application
-
-```bash
+**Goal:**
+A private, stateful, machine-local wellness assistant.
+---------------------------------------------------------------------------------------------------------------
+# 🛠 Tech Stack
+    * Java 17+
+    * Spring Boot
+    * LangChain4J
+    * REST API design
+    * Structured output parsing
+    * Tool-based orchestration
+---------------------------------------------------------------------------------------------------------------
+# 🧠 Architectural Principles
+    * LLMs reason. Java enforces.
+    * Tools are deterministic.
+    * Autonomy must be bounded.
+    * Side effects must be explicit.
+    * State must be owned by the backend.
+    * Single-domain depth over multi-domain superficiality.
+---------------------------------------------------------------------------------------------------------------
+# ▶️ Running the Application
 ./mvnw spring-boot:run
+---------------------------------------------------------------------------------------------------------------
+# 🚀 Why This Project Exists
+Most AI tutorials show:
+    * Prompt engineering
+    * Chat wrappers
+    * Frontend-heavy demos
+
+This project explores:
+    * How AI integrates into real backend systems
+    * How to design enforceable autonomy
+    * How to prevent hallucinated behavior
+    * How to build production-oriented agent systems in Java
