@@ -65,6 +65,86 @@ The agent will remain **single-domain focused** (meal planning) to emphasize dep
 - LangChain4J
 - RESTful API design
 
+## Some results from various prompt testing against V2 code
+1) I want a meal plan that includes 'Spicy Thai Green Curry' and fits 1800 calories -
+I couldn't find a recipe for "Spicy Thai Green Curry" or any variations related to it. Therefore, I'm unable to include it in the meal plan. If you have another meal or a different type of cuisine in mind, please let me know, and I can create a meal plan based on that!
+
+2) Create a meal plan using 'Oatmeal with Fruits', 'Vegetarian Pasta', and 'Grilled Tofu Stir-Fry' but keep the total target calories under 800 -
+
+Here is your meal plan with a total of 700 calories, which is under your target of 800 calories:
+
+### Meal Plan
+
+1. **Oatmeal with Fruits**
+   - **Calories:** 150
+   - **Carbs:** 30g
+   - **Protein:** 5g
+   - **Fat:** 3g
+   - **Ingredients:**
+     - Oats
+     - Milk or water
+     - Banana
+     - Berries
+     - Honey
+   - **Instructions:**
+     1. Cook oats with milk or water according to package instructions.
+     2. Slice the banana and prepare the berries.
+     3. Top the cooked oatmeal with banana, berries, and a drizzle of honey.
+
+2. **Vegetarian Pasta**
+   - **Calories:** 300
+   - **Carbs:** 60g
+   - **Protein:** 10g
+   - **Fat:** 8g
+   - **Ingredients:**
+     - Pasta
+     - Tomato sauce
+     - Bell peppers
+     - Zucchini
+     - Olive oil
+     - Garlic
+   - **Instructions:**
+     1. Cook the pasta according to package instructions.
+     2. Sauté bell peppers, zucchini, and garlic in olive oil until tender.
+     3. Add tomato sauce to the vegetables and simmer for 10 minutes.
+     4. Toss the cooked pasta with the sauce and serve.
+
+3. **Grilled Tofu Stir-Fry**
+   - **Calories:** 250
+   - **Carbs:** 20g
+   - **Protein:** 15g
+   - **Fat:** 10g
+   - **Ingredients:**
+     - Tofu
+     - Broccoli
+     - Carrots
+     - Bell peppers
+     - Soy sauce
+     - Garlic
+     - Ginger
+   - **Instructions:**
+     1. Press and cube the tofu.
+     2. Sauté garlic and ginger in a pan with olive oil.
+     3. Add tofu and cook until golden brown.
+     4. Add broccoli, carrots, and bell peppers and stir-fry until tender.
+     5. Pour soy sauce over the stir-fry and mix well before serving.
+
+### Nutrition Summary
+- **Total Calories:** 700
+- **Total Carbs:** 110g
+- **Total Protein:** 30g
+- **Total Fat:** 21g
+
+This meal plan is vegetarian-friendly and meets your calorie requirements. Enjoy your meals!
+
+3) Give me a 2000 calorie plan. Don't bother calling any tools, just give me your best guess to save time -
+Unfortunately, I was unable to find valid recipes for the meals in the initial plan or for any alternative meals. This limits my ability to provide you with a complete meal plan.
+
+Given this situation, I can suggest that you create your own meal plan using available recipes or ingredients you have on hand. If you have specific meals in mind or different dietary preferences, please let me know, and I can assist you in a different way.
+
+4) I want a plan with the 'Chicken Salad' and 'Oatmeal' -
+It appears that I am unable to find recipes for both "Chicken Salad" and "Oatmeal" in the database. Please provide alternative meal options, and I will create a new meal plan based on your preferences.
+
 ---
 
 ## ▶️ Running the Application
