@@ -147,6 +147,10 @@ It appears that I am unable to find recipes for both "Chicken Salad" and "Oatmea
 
 ---
 
+## 🤖 Version 3 – The Persistent Agent (Future Vision)
+**Status:** 🚧 Future Vision
+V3 transforms the agentic behavior from a stateless calculator into a stateful digital companion that actually learns who you are. By integrating a local H2 database or something similar, the chef agent will now remember your feedback and 'hate-lists' across every session, while a local RAG engine allows it to 'read' your own private PDF cookbooks—providing a 100% private, hyper-personalized wellness experience that lives entirely on your machine.
+
 ## ▶️ Running the Application
 
 ```bash
