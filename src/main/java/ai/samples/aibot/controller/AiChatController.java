@@ -16,4 +16,9 @@ public interface AiChatController {
     ResponseEntity<String> chat(
             @Parameter(required = true, schema = @Schema(implementation = ChatPayload.class))
             @RequestBody @Valid ChatPayload chatPayload);
+
+    @PostMapping("/v2.0/agent-meal-planner")
+    ResponseEntity<String> generateMealPlan(
+            @Parameter(required = true, schema = @Schema(implementation = ChatPayload.class))
+            @RequestBody @Valid ChatPayload chatPayload);
 }
